@@ -1,5 +1,6 @@
 ﻿using Application.Slices.SoccerFields.Common;
 using Application.UnitTests.TestCommon;
+using Application.UnitTests.TestCommon.Factories;
 using Domain.Aggregates;
 using Domain.ValueObjects;
 
@@ -14,21 +15,13 @@ public class SoccerFieldRepositoryTests
         return new SoccerFieldRepository(TestDbContext);
     }
     
-    private static SoccerField CreateSoccerFieldAggregate()
-    {
-        return new SoccerField(
-            EntityIdentity.Random, new FieldLocation(
-                UsState.Tennessee, new NonEmptyString("Chattanooga"), new NonEmptyString("Main St"),
-                new NonEmptyString("2223"), new NonEmptyString("30420")),
-            new NonEmptyString("La Bombonerita"));
-    }
     
     [Fact(Skip = TestWithDatabase.SKIP_INTEGRATION_TESTS)]
     public async Task CanStoreAndRetrieve()
     {
         // ************ ARRANGE ************
 
-        var soccerField = CreateSoccerFieldAggregate();
+        var soccerField = SoccerFieldFactory.Create();
 
         var sut = CreateSut();
 

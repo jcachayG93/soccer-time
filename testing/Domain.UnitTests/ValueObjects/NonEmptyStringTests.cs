@@ -5,7 +5,7 @@ using Domain.ValueObjects;
 
 namespace Domain.UnitTests.ValueObjects;
 
-public class NonEmptyStringBaseTests
+public class NonEmptyStringTests
 {
 
 
@@ -25,7 +25,7 @@ public class NonEmptyStringBaseTests
         var result = Record.Exception(() =>
         {
             // For a value object, I prefer not to rely on Nullable reference types, so I am ignoring them.
-            new Sut(value);
+            new NonEmptyString(value);
         });
 
         // ************ ASSERT *************
@@ -33,8 +33,8 @@ public class NonEmptyStringBaseTests
         if (shouldThrow)
         {
             Assert.NotNull(result);
-            Assert.IsType<DomainUserFacingException>(result);
-            Assert.Equal("Custom error message when value is empty or whitespace.", result.Message);
+            Assert.IsType<InvalidEntityStateException>(result);
+            Assert.Equal("NonEmptyString value is required.", result.Message);
         }
     }
 
@@ -46,7 +46,7 @@ public class NonEmptyStringBaseTests
 
         // ************ ACT ****************
 
-        var result = new Sut("Hello world!");
+        var result = new NonEmptyString("Hello world!");
 
         // ************ ASSERT *************
         
@@ -61,7 +61,7 @@ public class NonEmptyStringBaseTests
 
         // ************ ACT ****************
 
-        var result = new Sut("Hello world!");
+        var result = new NonEmptyString("Hello world!");
 
         // ************ ASSERT *************
         
@@ -70,10 +70,3 @@ public class NonEmptyStringBaseTests
     
 }
 
-record Sut : NonEmptyStringBase
-{
-    /// <inheritdoc />
-    public Sut(string value) : base(value, "Custom error message when value is empty or whitespace.")
-    {
-    }
-}

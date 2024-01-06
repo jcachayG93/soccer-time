@@ -5,23 +5,23 @@ namespace Domain.ValueObjects;
 /// <summary>
 /// Base class for a value object representing a non empty string with a custom user facing exception error message.
 /// </summary>
-public abstract record NonEmptyStringBase
+public record NonEmptyString
 {
     public string Value { get; }
 
-    protected NonEmptyStringBase(string value,
-        string errorMessage)
+    public NonEmptyString(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainUserFacingException(errorMessage);
+            throw new InvalidEntityStateException(
+                "NonEmptyString value is required.");
         }
 
         Value = value;
     }
 
     /// <inheritdoc />
-    public sealed override string ToString()
+    public override string ToString()
     {
         // Sealed prevents the implementation from changing the expected behavior.
         // Records, by default, override ToString with the type name.

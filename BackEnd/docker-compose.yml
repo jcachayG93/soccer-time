@@ -10,3 +10,15 @@ services:
       POSTGRES_DB: soccer_time_test_db
     ports:
       - "5444:5432"
+  soccer_time_dev_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: soccer_time_dev_db
+      # volumes:
+      #- /custom/mount:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+  

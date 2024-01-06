@@ -1,5 +1,6 @@
 ﻿
 using Domain.AggregatesAndEntities.Calendars;
+using Domain.AggregatesAndEntities.Calendars.ValueObjects;
 using Domain.Exceptions;
 using Domain.ValueObjects;
 
@@ -240,5 +241,65 @@ public class CalendarTests
         {
             Assert.Null(result);
         }
+    }
+
+    [Fact(Skip = "Not Implemented")]
+    public void RentSoccerField_WhenFieldIsAlreadyRented_Throws()
+    {
+        // ************ ARRANGE ************
+
+        var sut = CreateSut(
+            EntityIdentity.Random, EntityIdentity.Random,
+            MidnightUtcDate.Now, MidnightUtcDate.Now.AddDays(30),
+            new MinutesSinceMidnight(480), new NonNegativeInteger(0),
+            new NonNegativeInteger(45), new NonNegativeInteger(8));
+
+        var slotToRent = sut.CalendarSlots.First();
+
+        // ************ ACT ****************
+        
+        sut.RentSoccerField(slotToRent, new FieldRental(EntityIdentity.Random));
+
+        var result = Record.Exception(() =>
+        {
+            sut.RentSoccerField(slotToRent, new FieldRental(EntityIdentity.Random));
+        });
+
+        // ************ ASSERT *************
+        
+        Assert.NotNull(result);
+        Assert.IsType<InvalidEntityStateException>(result);
+        Assert.Equal("Soccer field is already rented.", result.Message);
+    }
+
+    [Fact]
+    public void CanRentSoccerField()
+    {
+        // ************ ARRANGE ************
+
+        var sut = CreateSut(
+            EntityIdentity.Random, EntityIdentity.Random,
+            MidnightUtcDate.Now, MidnightUtcDate.Now.AddDays(30),
+            new MinutesSinceMidnight(480), new NonNegativeInteger(0),
+            new NonNegativeInteger(45), new NonNegativeInteger(8));
+
+        var slotToRent = sut.CalendarSlots.First();
+        
+        var rental = new FieldRental(EntityIdentity.Random);
+
+        // ************ ACT ****************
+        
+        sut.RentSoccerField(slotToRent, rental);
+
+        // ************ ASSERT *************
+
+        var slotEntity = sut.PCalendarSlots.First(x =>
+            x.Id == slotToRent.Id.Value);
+
+        var slotValueObject = sut.CalendarSlots.First(x =>
+            x.Id == slotToRent.Id);
+        
+        Assert.Equal(rental, slotEntity.Rental);
+        Assert.Equal(slotToRent with {Rental = rental}, slotValueObject);
     }
 }

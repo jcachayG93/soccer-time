@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using Domain.AggregatesAndEntities.Calendars.ValueObjects;
+using Domain.Exceptions;
 using Domain.ValueObjects;
 
 namespace Domain.AggregatesAndEntities.Calendars;
@@ -67,7 +68,7 @@ public class Calendar
                         new EntityIdentity(slot.Id),
                         d.DayOfWeek,
                         slot.Duration,
-                        CalculateSlotBegins(slot.Id)))
+                        CalculateSlotBegins(slot.Id), slot.Rental))
                 ).ToArray();
         }
     }
@@ -135,6 +136,14 @@ public class Calendar
         }
 
         return result;
+    }
+
+    public void RentSoccerField(Slot slot, FieldRental rental)
+    {
+        var slotEntity = PCalendarSlots.First(s =>
+            s.Id == slot.Id.Value);
+        
+        slotEntity.Rent(rental);
     }
 
     public void AssertEntityStateIsValid()

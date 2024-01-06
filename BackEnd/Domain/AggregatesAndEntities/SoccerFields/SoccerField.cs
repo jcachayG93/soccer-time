@@ -2,7 +2,7 @@
 
 namespace Domain.Aggregates;
 
-public class SoccerField
+public class SoccerField : ISoccerFieldAggregateRoot
 {
     public Guid Id { get; private set; }
 

@@ -27,8 +27,13 @@ public abstract class TestWithDatabase
                 "Server=localhost;Port=5444;Database=soccer_time_test_db;User Id=user;Password=password;")
             .Options;
 
-        TestDbContext = new(options);
-        if (!TestDbContext.Database.CanConnect())
+        try
+        {
+            TestDbContext = new(options);
+            TestDbContext.Database.EnsureDeleted();
+            TestDbContext.Database.Migrate();
+        }
+        catch (Npgsql.NpgsqlException e)
         {
             throw new InvalidOperationException(
                 "Failed connecting to test database. For Database integration tests, a Postgres database is required to be running in Docker" +
@@ -37,8 +42,8 @@ public abstract class TestWithDatabase
                 $"You can also TURN OFF the integration tests by going to the DatabaseIntegrationTEstBase class switching the commented constants " +
                 $"(at the very top) that skips tests, so this line is not commented: SKIP_INTEGRATION_TESTS = \"Integration tests are off\"");
         }
-        TestDbContext.Database.EnsureDeleted();
-        TestDbContext.Database.Migrate();
+
+
 
     }
 

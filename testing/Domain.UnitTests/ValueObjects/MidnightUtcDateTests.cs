@@ -56,4 +56,73 @@ public class MidnightUtcDateTests
         Assert.Equal(0, result.Value.Second);
         Assert.Equal(0, result.Value.Millisecond);
     }
+    
+    [Fact]
+    public void ExposesDayOfWeek()
+    {
+        // ************ ARRANGE ************
+
+        var value = DateTime.UtcNow; 
+
+        // ************ ACT ****************
+
+        var result = new MidnightUtcDate(value);
+
+        // ************ ASSERT *************
+        
+        Assert.Equal(value.DayOfWeek, result.DayOfWeek);
+    }
+
+    [Fact]
+    public void CanCreateNow()
+    {
+        // ************ ARRANGE ************
+        
+        
+
+        // ************ ACT ****************
+
+        var result = MidnightUtcDate.Now;
+
+        // ************ ASSERT *************
+        
+        // https://stackoverflow.com/a/13467254/14132160
+        Assert.Equal(DateTime.UtcNow.Date, result.Value);
+    }
+
+    [Fact]
+    public void CanAddDays()
+    {
+        // ************ ARRANGE ************
+
+        var now = new MidnightUtcDate(new DateTime(2024, 1, 1).ToUniversalTime());
+
+        // ************ ACT ****************
+
+        var tomorrow = now.AddDays(1);
+
+        // ************ ASSERT *************
+        
+        Assert.Equal(now.Value.Day + 1, tomorrow.Value.Day);
+    }
+
+    [Fact]
+    public void CanGetDayDatesFromAnotherDate()
+    {
+        // ************ ARRANGE ************
+
+        var now = new MidnightUtcDate(new DateTime(2024, 1, 10).ToUniversalTime());
+        var twoDaysAgo = new MidnightUtcDate(new DateTime(2024, 1, 8).ToUniversalTime());
+
+        // ************ ACT ****************
+
+        var result = now.GetDayDatesSince(twoDaysAgo);
+
+        // ************ ASSERT *************
+        
+        Assert.Equal(3, result.Length);
+        Assert.Equal(new DateTime(2024,1,8).ToUniversalTime().Date, result[0].Value);
+        Assert.Equal(new DateTime(2024,1,9).ToUniversalTime().Date, result[1].Value);
+        Assert.Equal(new DateTime(2024,1,10).ToUniversalTime().Date, result[2].Value);
+    }
 }

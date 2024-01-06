@@ -1,0 +1,12 @@
+﻿
+version: "3.1"
+services:
+  soccer_time_test_database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: soccer_time_test_db
+    ports:
+      - "5444:5432"

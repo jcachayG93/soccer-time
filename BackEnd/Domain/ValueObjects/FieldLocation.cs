@@ -10,7 +10,13 @@ public record FieldLocation
     public string Number { get; }
 
     public string ZipCode { get; }
-    
+
+    // Ef Core
+    private FieldLocation()
+    {
+        
+    }
+
     public FieldLocation(
         UsState state,
         NonEmptyString city,

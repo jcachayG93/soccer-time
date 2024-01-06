@@ -8,7 +8,12 @@ public class SoccerField : ISoccerFieldAggregateRoot
 
     public FieldLocation Location { get; private set; }
 
-    public string Name { get; }
+    public string Name { get; private set; }
+
+    public void UpdateName(string name)
+    {
+        Name = name;
+    }
 
     // Will use Ef Core as ORM, it requies a parameterless consturctor but can be private like here.
     private SoccerField()

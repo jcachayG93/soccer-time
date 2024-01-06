@@ -21,6 +21,8 @@ public class SoccerField
         FieldLocation location,
         NonEmptyString name)
     {
-        throw new NotImplementedException();
+        Id = id.Value;
+        Location = location;
+        Name = name.Value;
     }
 }

@@ -42,12 +42,28 @@ public class MinutesSinceMidnightTests
         {
             Assert.NotNull(result);
             Assert.IsType<InvalidEntityStateException>(result);
-            Assert.Equal("MinutesSinceMidnigth value must be between 0 and 1439.", 
+            Assert.Equal("MinutesSinceMidnight value must be between 0 and 1439.", 
                 result.Message);
         }
         else
         {
             Assert.Null(result);
         }
+    }
+
+    [Fact]
+    public void CanAddMinutes()
+    {
+        // ************ ARRANGE ************
+
+        var sut = new MinutesSinceMidnight(100);
+
+        // ************ ACT ****************
+
+        var result = sut.AddMinutes(10);
+
+        // ************ ASSERT *************
+        
+        Assert.Equal(110, result.Value);
     }
 }

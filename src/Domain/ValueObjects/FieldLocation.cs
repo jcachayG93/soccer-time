@@ -10,11 +10,7 @@ public record FieldLocation
     public string Number { get; }
 
     public string ZipCode { get; }
-
-    /*
-     * TODO: We forgot the state, but the state should be a Value object itself,
-     * not just a random string. 
-     */
+    
     public FieldLocation(
         UsState state,
         NonEmptyString city,

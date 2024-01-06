@@ -12,9 +12,14 @@ public record MinutesSinceMidnight
         if (value < 0 || value > 1439)
         {
             throw new InvalidEntityStateException(
-                "MinutesSinceMidnigth value must be between 0 and 1439.");
+                "MinutesSinceMidnight value must be between 0 and 1439.");
         }
 
         Value = value;
+    }
+
+    public MinutesSinceMidnight AddMinutes(int minutes)
+    {
+        return new MinutesSinceMidnight(Value + minutes);
     }
 }
